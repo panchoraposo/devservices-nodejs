@@ -1,0 +1,71 @@
+schemaVersion: 2.2.0
+metadata:
+  name: nodejs-testcontainers
+  version: 1.0.0
+components:
+  - name: tools
+    container:
+      image: registry.redhat.io/devspaces/udi-rhel9
+      memoryLimit: 3Gi
+      mountSources: true
+      sourceMapping: /projects
+      command: ["sleep"]
+      args: ["infinity"]
+      env:
+        - name: NODE_ENV
+          value: development
+        - name: DB_HOST
+          value: postgres
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_NAME
+          value: moviesdb
+        - name: DB_USERNAME
+          value: devuser
+        - name: DB_PASSWORD
+          value: devpass
+      endpoints:
+        - name: http
+          targetPort: 3000
+          exposure: public
+          protocol: http
+      volumeMounts:
+        - name: docker-sock
+          path: /var/run/docker.sock
+
+  - name: docker-sock
+    volume:
+      ephemeral: false
+
+commands:
+  - id: install
+    exec:
+      component: tools
+      commandLine: |
+        npm install
+      workingDir: /projects/devservices-nodejs/my-nest-app
+      group:
+        kind: build
+        isDefault: true
+
+  - id: deploy-db
+    exec:
+      component: tools
+      commandLine: |
+        echo "Deploying PostgreSQL DB to OpenShift..."
+        oc apply -f /projects/devservices-nodejs/my-nest-app/openshift/postgres.yaml
+        echo "Waiting for PostgreSQL pod to be ready..."
+        oc wait --for=condition=Ready pod -l app=postgres --timeout=60s
+      workingDir: /projects/devservices-nodejs/my-nest-app/openshift/
+      group:
+        kind: deploy
+        isDefault: true
+
+  - id: start
+    exec:
+      component: tools
+      commandLine: npm run start:dev
+      workingDir: /projects/devservices-nodejs/my-nest-app
+      group:
+        kind: run
+        isDefault: true
