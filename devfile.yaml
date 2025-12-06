@@ -38,7 +38,7 @@ components:
       ephemeral: false
 
 commands:
-  - id: 1. install
+  - id: 1-install
     exec:
       component: tools
       commandLine: |
@@ -48,7 +48,7 @@ commands:
         kind: build
         isDefault: true
 
-  - id: 2. deploy-db
+  - id: 2-deploy-db
     exec:
       component: tools
       commandLine: |
@@ -61,7 +61,7 @@ commands:
         kind: deploy
         isDefault: true
 
-  - id: 3. start
+  - id: 3-start
     exec:
       component: tools
       commandLine: npm run start:dev
