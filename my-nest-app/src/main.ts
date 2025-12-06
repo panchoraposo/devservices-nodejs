@@ -1,4 +1,4 @@
-import './setup-testcontainers';
+//import './setup-testcontainers';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DevDatabaseService } from './dev-database/dev-database.service';
@@ -7,12 +7,12 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 let devDbService: DevDatabaseService;
 
 async function bootstrap() {
-  if (process.env.NODE_ENV === 'development') {
+  /*if (process.env.NODE_ENV === 'development') {
     console.log('🟢 Modo desarrollo: arrancando contenedor de base de datos...');
     devDbService = new DevDatabaseService();
     await devDbService.start();
     console.log('🟢 Contenedor de base de datos listo');
-  }
+  }*/
 
   const app = await NestFactory.create(AppModule);
 
@@ -25,7 +25,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger', app, document);
 
-  await app.listen(3000);
+  await app.listen(3000, '0.0.0.0');
   console.log(`🚀 Aplicación corriendo en http://localhost:3000`);
 }
 
