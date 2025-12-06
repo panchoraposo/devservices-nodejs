@@ -31,9 +31,9 @@ async function bootstrap() {
 
 async function shutdown() {
   console.log('\n🧹 Cerrando aplicación...');
-  if (devDbService) {
+  /*if (devDbService) {
     await devDbService.stop();
-  }
+  }*/
   process.exit(0);
 }
 
