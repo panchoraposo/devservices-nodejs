@@ -25,10 +25,12 @@ components:
         - name: DB_PASSWORD
           value: devpass
       endpoints:
-        - name: http
+        - name: https-node
           targetPort: 3000
-          exposure: public
-          protocol: http
+          protocol: https
+        - exposure: none
+          name: debug
+          targetPort: 9229
       volumeMounts:
         - name: docker-sock
           path: /var/run/docker.sock
