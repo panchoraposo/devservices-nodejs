@@ -1,6 +1,6 @@
 schemaVersion: 2.2.0
 metadata:
-  name: nodejs-testcontainers
+  name: nestjs-postgresql
   version: 1.0.0
 components:
   - name: tools
@@ -40,17 +40,7 @@ components:
       ephemeral: false
 
 commands:
-  - id: 1-install
-    exec:
-      component: tools
-      commandLine: |
-        npm install
-      workingDir: /projects/devservices-nodejs/my-nest-app
-      group:
-        kind: build
-        isDefault: true
-
-  - id: 2-deploy-db
+  - id: 1-deploy-db
     exec:
       component: tools
       commandLine: |
@@ -61,6 +51,16 @@ commands:
       workingDir: /projects/devservices-nodejs/my-nest-app/openshift/
       group:
         kind: deploy
+        isDefault: true
+
+  - id: 2-install
+    exec:
+      component: tools
+      commandLine: |
+        npm install
+      workingDir: /projects/devservices-nodejs/my-nest-app
+      group:
+        kind: build
         isDefault: true
 
   - id: 3-start
